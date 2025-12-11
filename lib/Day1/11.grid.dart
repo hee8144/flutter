@@ -22,14 +22,13 @@ class MyApp extends StatelessWidget {
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 4,mainAxisSpacing: 10,crossAxisSpacing: 10),
             itemCount: labels.length,
             itemBuilder: (test , index){
-
                var btnColor = index % 4 ==3 ? Colors.blue[200] : Colors.blue[50];
               return ElevatedButton(onPressed: (){},
                 style: ElevatedButton.styleFrom(
                   backgroundColor:  btnColor
                 ),
                 child: Center(
-                  child:Text(labels[index])
+                  child:Text(labels[index],style:TextStyle(color : Colors.white, fontSize: 30))
                 ),
               );
             }
