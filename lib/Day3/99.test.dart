@@ -58,7 +58,7 @@ class _MyAppState extends State<MyApp> {
 
             Expanded(
               child: _todo.isEmpty
-            ? Center(child: Text("할 일 없음"),) :
+                  ? Center(child: Text("할 일 없음"),) :
               ListView.builder(
                 itemCount: _todo.length,
                 itemBuilder: (context, index) {
@@ -89,15 +89,25 @@ class _MyAppState extends State<MyApp> {
                     ),
 
                     trailing: IconButton(
-                      icon: const Icon(Icons.delete),
-                      onPressed: () {
-                        setState(() {
-                          _todoCheck.remove(_todo[index]);
-                          _todo.removeAt(index);
-                        });
+                        icon: const Icon(Icons.delete),
+                        onPressed: () =>showDialog(context: context, builder: (BuildContext context){
+                          return
+                            AlertDialog(title: Text("삭제?"),content: Text("정말 삭제 하시겠습니까?"),actions: [
+                              TextButton(onPressed: (){
+                                setState(() {
+                                  _todoCheck.remove(_todo[index]);
+                                  _todo.removeAt(index);
 
-                        Fluttertoast.showToast(msg: "삭제되었습니다.");
-                      },
+                                });
+                                Fluttertoast.showToast(msg: "삭제되었습니다.");
+                                Navigator.of(context).pop();
+                              }, child: Text("삭제")),
+                              TextButton(onPressed: (){
+                                Navigator.of(context).pop();
+
+                              }, child: Text("취소")),
+                            ]);
+                        })
                     ),
                   );
                 },
