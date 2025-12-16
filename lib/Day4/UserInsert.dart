@@ -1,5 +1,7 @@
-import 'package:flutter/material.dart';
+import 'dart:ffi';
 
+import 'package:flutter/material.dart';
+import 'db.dart';
 import 'UserList.dart';
 
 void main() {
@@ -55,7 +57,11 @@ class _UserInsertState extends State<UserInsert> {
               ),
             ),
             SizedBox(height: 30,),
-            ElevatedButton(onPressed: (){}, child: Text("사용자추가"))
+            ElevatedButton(onPressed: () async {
+              await DB.insertTBL_USER(_Name.text,int.parse(_Age.text));
+              _Name.clear();
+              _Age.clear();
+            }, child: Text("사용자추가"))
           ],
         ),
       ),

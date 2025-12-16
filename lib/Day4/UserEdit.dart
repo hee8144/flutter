@@ -1,45 +1,71 @@
 import 'package:firstproject/Day4/UserList.dart';
 import 'package:flutter/material.dart';
+import 'db.dart';
 
+class UserEdit extends StatefulWidget {
+  final int? userId;
+  UserEdit({super.key, this.userId});
 
-class Useredit extends StatelessWidget {
-  final String? id;
-  final String? name;
-  const Useredit({super.key,this.id,this.name});
+  @override
+  State<UserEdit> createState() => _UserEditState();
+}
+
+class _UserEditState extends State<UserEdit> {
+  TextEditingController nameCtrl = TextEditingController();
+  TextEditingController ageCtrl = TextEditingController();
+  Map<String,dynamic> info = {};
+
+  Future<void> _selectUser () async{
+    var user = await DB.getUser( widget.userId!);
+
+    setState(() {
+      info=user.first ;
+      nameCtrl.text =info["name"];
+      ageCtrl.text =info["age"].toString();
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _selectUser();
+  }
 
   @override
   Widget build(BuildContext context) {
-    var _Id = TextEditingController(text: id);
-    var _Name = TextEditingController(text: name);
     return Scaffold(
         appBar: AppBar(
-          title: Text("사용자수정"),
+          title : Text("사용자 수정"),
         ),
-      body: Padding(
-        padding: EdgeInsetsGeometry.all(30),
-        child: Column(
-          children: [
-            TextField(
-              controller: _Id,
-              decoration: InputDecoration(
-                labelText: "Name",
+        body : Padding(
+          padding: EdgeInsets.all(10),
+          child: Column(
+            children: [
+              TextField(
+                controller: nameCtrl,
+                decoration: InputDecoration(
+                    labelText: "Name"
+                ),
+              ),
+              TextField(
+                controller: ageCtrl,
+                decoration: InputDecoration(
+                    labelText: "Age"
+                ),
+              ),
+              SizedBox(height: 20,),
+              ElevatedButton(
+                  onPressed: ()  async {
+                    await DB.updateUser(info["userId"], nameCtrl.text, int.parse(ageCtrl.text));
+                    Navigator.pop(context,true);
+                  },
+                  child: Text("수정")
+              )
+            ],
+          ),
+        )
 
-              ),
-            ),
-            TextField(
-              controller: _Name,
-              decoration: InputDecoration(
-                labelText: "Age",
-              ),
-            ),
-            SizedBox(height: 30,),
-            ElevatedButton(onPressed: (){
-              Navigator.push(context, MaterialPageRoute(builder: (_)=>Userlist()));
-            }, child: Text("수정"))
-          ],
-        ),
-      ),
     );
   }
 }
-
